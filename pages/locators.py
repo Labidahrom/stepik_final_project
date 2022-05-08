@@ -17,6 +17,11 @@ class ProductPageLocators():
 class BasePageLocators():
     LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
     LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
+    CART_ICON = (By.CSS_SELECTOR, "span a.btn.btn-default")
+
+class BasketPageLocators():
+    ITEMS_IN_CART_HEADER = (By.CSS_SELECTOR, "h2.col-sm-6.h3")
+    EMPTY_CART_MESSAGE = (By.CSS_SELECTOR, "div#content_inner p")
 
 
 
