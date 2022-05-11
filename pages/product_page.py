@@ -13,7 +13,7 @@ class ProductPage(BasePage):
         return item_in_cart
 
     def should_be_right_book(self, book_name):
-        assert self.get_item_name_in_cart() == book_name, "Incorrect book"
+        assert book_name in self.get_item_name_in_cart(), "Incorrect book"
 
     def get_item_price_in_cart(self):
         item_prict_in_cart = self.browser.find_element(*ProductPageLocators.ITEM_PRICE).text

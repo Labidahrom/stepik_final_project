@@ -5,6 +5,7 @@ from .pages.base_page import BasePage
 from .pages.basket_page import BasketPage
 import time
 import pytest
+import random
 
 # @pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
 #                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
@@ -63,14 +64,41 @@ import pytest
 #     login_page = LoginPage(browser, browser.current_url)
 #     login_page.should_be_login_page()
 
-def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
-    link = "http://selenium1py.pythonanywhere.com/ru/"
-    page = ProductPage(browser, link)
-    page.open()
-    page.go_to_cart_page()
-    basket_page = BasketPage(browser, browser.current_url)
-    basket_page.should_not_be_goods_in_the_cart()
-    basket_page.should_be_massage_about_empty_cart()
+# def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
+#     link = "http://selenium1py.pythonanywhere.com/ru/"
+#     page = ProductPage(browser, link)
+#     page.open()
+#     page.go_to_cart_page()
+#     basket_page = BasketPage(browser, browser.current_url)
+#     basket_page.should_not_be_goods_in_the_cart()
+#     basket_page.should_be_massage_about_empty_cart()
+
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = 'http://selenium1py.pythonanywhere.com/ru/accounts/login/'
+        page = LoginPage(browser, link)
+        page.open()
+        generate_email = str(random.randint(1, 100)) + str(random.randint(1, 1000)) + "aa@yandex.ru"
+        page.register_new_user(generate_email, "Khfu23438z")
+        page.should_be_authorized_user()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = 'http://selenium1py.pythonanywhere.com/ru/catalogue/coders-at-work_207/'
+        page = ProductPage(browser, link)
+        page.open()
+        page.add_to_cart()
+        # page.solve_quiz_and_get_code()
+        page.should_be_right_book("Coders at Work")
+        page.should_be_right_price('19,99 £')
+
+    def test_user_cant_see_success_message_after_adding_product_to_basket(self, browser):
+        link = 'http://selenium1py.pythonanywhere.com/ru/catalogue/coders-at-work_207/'
+        page = ProductPage(browser, link)
+        page.open()
+        page.add_to_cart()
+        # page.solve_quiz_and_get_code()
+        page.should_not_be_success_message()
 
 
 
